@@ -24,13 +24,7 @@ class ThemeEngineContent {
     return !!chrome.runtime?.id;
   }
 
-  // Utility method to log warnings only in debug mode
-  logDebugWarning(message) {
-    if (chrome.runtime.getManifest().version.includes('dev') || 
-        localStorage.getItem('theme-engine-debug') === 'true') {
-      console.warn(`Theme Engine: ${message}`);
-    }
-  }
+
 
   init() {
     // Add a small delay to ensure extension context is ready
@@ -59,7 +53,6 @@ class ThemeEngineContent {
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                   // Check if extension context is still valid
         if (!this.isExtensionContextValid()) {
-          this.logDebugWarning('Extension context invalid, ignoring message');
           sendResponse({ error: 'Extension context invalid' });
           return;
         }
@@ -84,11 +77,7 @@ class ThemeEngineContent {
               console.log('Theme Engine: Responding to ping');
               sendResponse({ success: true, ready: true });
               break;
-            case 'setDebugMode':
-              // Update debug mode state
-              localStorage.setItem('theme-engine-debug', request.debugMode.toString());
-              sendResponse({ success: true });
-              break;
+
             default:
               sendResponse({ error: 'Unknown action' });
           }
@@ -108,7 +97,6 @@ class ThemeEngineContent {
       chrome.storage.onChanged.addListener((changes, namespace) => {
         // Check if extension context is still valid
         if (!this.isExtensionContextValid()) {
-          this.logDebugWarning('Extension context invalid, ignoring storage changes');
           return;
         }
         
@@ -366,7 +354,6 @@ class ThemeEngineContent {
     return new Promise((resolve) => {
       // Check if extension context is still valid
       if (!this.isExtensionContextValid()) {
-        this.logDebugWarning('Extension context invalid, cannot access storage');
         resolve({});
         return;
       }
@@ -410,11 +397,6 @@ try {
 document.addEventListener('visibilitychange', () => {
   // Check if extension context is still valid
   if (!chrome.runtime?.id) {
-    // Only log warning in development mode or if debugging is enabled
-    if (chrome.runtime.getManifest().version.includes('dev') || 
-        localStorage.getItem('theme-engine-debug') === 'true') {
-      console.warn('Theme Engine: Extension context invalid, skipping visibility change handler');
-    }
     return;
   }
   

@@ -13,7 +13,6 @@ A professional browser extension for customizing website themes with CSS variabl
 - **📁 Theme Management**: Create, edit, and manage multiple themes
 - **🔗 URL Pattern Matching**: Apply themes to specific websites or all sites
 - **📤 Import/Export**: Import themes from JSON or CSS files
-- **🐛 Debug Mode**: Toggle debug logging for development
 - **⚡ Performance Optimized**: Built with Manifest V3 for better performance
 - **🔄 Auto-sync**: Themes automatically sync across browser sessions
 
@@ -134,8 +133,7 @@ Theme Engine: Extension context invalid, skipping visibility change handler
 
 **How to Handle:**
 1. **Normal Usage**: These warnings are harmless and don't affect functionality
-2. **Debug Mode**: Click the debug icon (⚙️) in the extension popup to enable detailed logging
-3. **Development**: Warnings are automatically shown in development mode
+2. **Development**: Warnings are automatically shown in development mode
 
 ### Common Issues
 
@@ -150,12 +148,6 @@ Theme Engine: Extension context invalid, skipping visibility change handler
 2. Ensure "Developer mode" is enabled in Chrome extensions
 3. Try reloading the extension
 4. Check the browser console for errors
-
-**Debug Mode:**
-To enable debug mode:
-1. Click the debug icon (⚙️) in the extension popup header
-2. Debug mode will show detailed console logs for troubleshooting
-3. Click again to disable debug mode
 
 ## 🤝 Contributing
 
@@ -179,8 +171,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 1. Check the troubleshooting section above
-2. Enable debug mode for detailed logging
-3. Open an issue on GitHub with detailed information
+2. Open an issue on GitHub with detailed information
 
 ---
 

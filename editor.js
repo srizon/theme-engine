@@ -99,7 +99,7 @@ class ThemeEditor {
         if (this.isValid) {
           this.autoSave();
         }
-      }, 500);
+      }, 300); // Reduced from 500ms to 300ms for faster auto-save
     });
 
     // Handle scroll synchronization
@@ -198,11 +198,12 @@ class ThemeEditor {
         return;
       }
       
-      // Update theme
+      // Update theme with precise timestamp
+      const now = new Date();
       themes[this.currentThemeId].name = this.themeNameInput.value;
       themes[this.currentThemeId].websiteUrl = this.websiteUrlInput.value;
       themes[this.currentThemeId].css = this.editor.value;
-      themes[this.currentThemeId].updatedAt = new Date().toISOString();
+      themes[this.currentThemeId].updatedAt = now.toISOString();
       
       // Save to storage
       await this.setStorageData({ themes: themes });
@@ -211,6 +212,7 @@ class ThemeEditor {
       this.originalCSS = this.editor.value;
       this.theme.name = this.themeNameInput.value;
       this.theme.websiteUrl = this.websiteUrlInput.value;
+      this.theme.updatedAt = now.toISOString();
       
       // Apply changes if theme is enabled
       const enabledData = await this.getStorageData('isEnabled');
@@ -309,11 +311,12 @@ class ThemeEditor {
         return;
       }
       
-      // Update theme
+      // Update theme with precise timestamp
+      const now = new Date();
       themes[this.currentThemeId].name = this.themeNameInput.value;
       themes[this.currentThemeId].websiteUrl = this.websiteUrlInput.value;
       themes[this.currentThemeId].css = this.editor.value;
-      themes[this.currentThemeId].updatedAt = new Date().toISOString();
+      themes[this.currentThemeId].updatedAt = now.toISOString();
       
       // Save to storage
       await this.setStorageData({ themes: themes });
@@ -322,6 +325,7 @@ class ThemeEditor {
       this.originalCSS = this.editor.value;
       this.theme.name = this.themeNameInput.value;
       this.theme.websiteUrl = this.websiteUrlInput.value;
+      this.theme.updatedAt = now.toISOString();
       
       this.showStatus('Auto-saved', 'saved');
       setTimeout(() => {
@@ -837,7 +841,7 @@ class ThemeEditor {
       if (this.isValid) {
         this.autoSave();
       }
-    }, 1000);
+    }, 500); // Reduced from 1000ms to 500ms for more responsive saving
   }
 
   async exportTheme() {

@@ -47,10 +47,10 @@
     }
 
     .header-icon {
-      width: 32px;
-      height: 32px;
-      background: #ffd700;
-      border-radius: 6px;
+      width: 24px;
+      height: 24px;
+      background: #ffd400;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -92,25 +92,22 @@
       height: 20px;
     }
 
-    .form-section {
-      padding: 20px;
-    }
-
     .form-group {
       margin-bottom: 20px;
     }
 
     .form-label {
       display: block;
-      font-size: 16px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 400;
       color: white;
       margin-bottom: 8px;
+      text-transform: uppercase;
     }
 
     .form-input {
       width: 100%;
-      background: #2a2a2a;
+      background: #1e1e1e;
       border: 1px solid #444;
       border-radius: 6px;
       padding: 12px 16px;
@@ -130,7 +127,7 @@
     }
 
     .variables-section {
-      padding: 0 20px;
+      padding: 20px;
       flex: 1;
       overflow-y: auto;
     }
@@ -178,7 +175,7 @@
       background: #1e1e1e;
       border-radius: 8px;
       margin-bottom: 20px;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
       font-size: 13px;
       line-height: 1.5;
       position: relative;
@@ -191,7 +188,7 @@
       display: flex;
       height: 100%;
       position: relative;
-      min-height: 320px;
+      min-height: 360px;
     }
 
     .line-numbers {
@@ -436,7 +433,7 @@
     <header class="header">
       <div class="header-left">
         <div class="header-icon">
-          <img src="icons/icon-header.svg" width="20" height="20" alt="Theme Engine">
+          <img src="icons/icon-header.svg" width="24" height="24" alt="Theme Engine">
         </div>
         <h1 class="title">Edit Theme</h1>
       </div>
@@ -450,7 +447,7 @@
       </div>
     </header>
     
-    <div class="form-section">
+    <div class="variables-section">
       <div class="form-group">
         <label class="form-label" for="theme-name-input">Theme Name</label>
         <input type="text" id="theme-name-input" class="form-input" placeholder="My first theme">
@@ -460,10 +457,8 @@
         <label class="form-label" for="website-url-input">Website URL</label>
         <input type="text" id="website-url-input" class="form-input" placeholder="https://example.com">
       </div>
-    </div>
-    
-    <div class="variables-section">
-      <label class="variables-label">Variables</label>
+
+      <label class="form-label">Theme variables</label>
       <main class="editor-container" id="editor-container">
         <div class="editor-wrapper">
           <div class="line-numbers" id="line-numbers">

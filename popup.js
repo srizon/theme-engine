@@ -7,7 +7,6 @@ class ThemeEngine {
     this.createThemeBtn = document.getElementById('create-theme-btn');
     this.importThemeBtn = document.getElementById('import-theme-btn');
     this.scanButton = document.getElementById('scan-button');
-    this.debugButton = document.getElementById('debug-button');
     
     // Modal elements
     this.themeModal = document.getElementById('theme-modal');
@@ -33,7 +32,7 @@ class ThemeEngine {
   init() {
     this.setupEventListeners();
     this.loadThemes();
-    this.loadDebugState();
+    this.setupStorageListener();
   }
 
   setupEventListeners() {
@@ -55,9 +54,7 @@ class ThemeEngine {
       this.scanCurrentPage();
     });
 
-    this.debugButton.addEventListener('click', () => {
-      this.toggleDebugMode();
-    });
+
 
     // Modal events
     this.modalClose.addEventListener('click', () => {
@@ -78,6 +75,21 @@ class ThemeEngine {
         this.closeModal();
       }
     });
+  }
+
+  setupStorageListener() {
+    // Listen for changes in chrome storage to update the UI when themes are modified from the editor
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      if (namespace === 'local' && changes.themes) {
+        // Reload themes and update UI when themes are changed
+        this.loadThemes();
+      }
+    });
+
+    // Refresh timestamps every 30 seconds to keep them accurate
+    setInterval(() => {
+      this.updateThemeUI();
+    }, 30000);
   }
 
   // Theme Management Methods
@@ -215,10 +227,13 @@ class ThemeEngine {
   getRelativeTime(dateString) {
     const date = new Date(dateString);
     const now = new Date();
-    const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
     
-    if (diffInMinutes < 1) {
+    if (diffInSeconds < 10) {
       return 'Updated just now';
+    } else if (diffInSeconds < 60) {
+      return `Updated ${diffInSeconds} sec ago`;
     } else if (diffInMinutes < 60) {
       return `Updated ${diffInMinutes} min ago`;
     } else if (diffInMinutes < 1440) {
@@ -516,6 +531,7 @@ class ThemeEngine {
         id: newThemeId,
         name: themeData.name || 'Imported Theme',
         description: themeData.description || 'Imported theme',
+        websiteUrl: themeData.websiteUrl || '',
         css: themeData.css || '--black: #000;\n--text-color: var(--black);',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -551,34 +567,7 @@ class ThemeEngine {
     });
   }
 
-  toggleDebugMode() {
-    const isDebugEnabled = localStorage.getItem('theme-engine-debug') === 'true';
-    const newDebugState = !isDebugEnabled;
-    
-    localStorage.setItem('theme-engine-debug', newDebugState.toString());
-    this.updateDebugButtonState(newDebugState);
-    
-    // Notify content script about debug mode change
-    this.sendMessageToContentScript({ 
-      action: 'setDebugMode', 
-      debugMode: newDebugState 
-    });
-    
-    console.log(`Theme Engine: Debug mode ${newDebugState ? 'enabled' : 'disabled'}`);
-  }
 
-  updateDebugButtonState(isActive) {
-    if (isActive) {
-      this.debugButton.classList.add('active');
-    } else {
-      this.debugButton.classList.remove('active');
-    }
-  }
-
-  loadDebugState() {
-    const isDebugEnabled = localStorage.getItem('theme-engine-debug') === 'true';
-    this.updateDebugButtonState(isDebugEnabled);
-  }
 }
 
 // Initialize the app when DOM is loaded
