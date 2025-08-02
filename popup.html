@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Engine</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 375px;
+      height: 600px;
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #2a2a2a;
+      color: white;
+      overflow: hidden;
+    }
+
+    .theme-selector {
+      background: #2a2a2a;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Header Styles */
+    .header {
+      position: absolute;
+      background: #2a2a2a;
+      border-bottom: 1px solid #3b3b3b;
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-start;
+      left: 0;
+      padding: 16px;
+      top: 0;
+      width: 375px;
+    }
+
+    .app-icon {
+      background: #ffd400;
+      border-radius: 12px;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .app-icon svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .app-title {
+      flex: 1;
+      font-family: 'SF Pro Display', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 24px;
+      color: #eff0f5;
+      text-transform: capitalize;
+    }
+
+    .header-controls {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      background: #ffd400;
+      border-radius: 100px;
+      height: 24px;
+      width: 39px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-switch.inactive {
+      background: #444;
+    }
+
+    .toggle-handle {
+      position: absolute;
+      right: 3px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: all 0.3s ease;
+    }
+
+    .toggle-switch.inactive .toggle-handle {
+      right: auto;
+      left: 3px;
+    }
+
+    .toggle-handle-inner {
+      background: #323232;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scan-button {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .debug-button {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      transition: color 0.2s ease;
+    }
+
+    .debug-button:hover {
+      color: #ffd400;
+    }
+
+    .debug-button.active {
+      color: #ffd400;
+    }
+
+    /* Main Content */
+    .main-content {
+      position: absolute;
+      left: 0;
+      top: 56px;
+      width: 375px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Theme Item Styles */
+    .theme-item {
+      border-radius: 12px;
+      height: 76px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .theme-item.active {
+      background: #ffd400;
+    }
+
+    .theme-item.inactive {
+      background: #1e1e1e;
+    }
+
+    .theme-icon {
+      border-radius: 50px;
+      padding: 12px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-item.active .theme-icon {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-item.inactive .theme-icon {
+      background: rgba(245, 229, 86, 0.1);
+    }
+
+    .theme-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .theme-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+
+    .theme-name {
+      font-family: 'SF Pro Display', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .theme-item.active .theme-name {
+      color: #000000;
+    }
+
+    .theme-item.inactive .theme-name {
+      color: #ffffff;
+    }
+
+    .theme-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    .theme-url, .theme-updated {
+      font-family: 'SF Pro Display', sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 14px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .theme-item.active .theme-url,
+    .theme-item.active .theme-updated {
+      color: #2a2a2a;
+    }
+
+    .theme-item.inactive .theme-url,
+    .theme-item.inactive .theme-updated {
+      color: #989898;
+    }
+
+    .theme-edit-button {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Bottom Buttons */
+    .bottom-buttons {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      padding: 32px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .primary-button {
+      background: #ffd400;
+      border-radius: 8px;
+      padding: 12px 24px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      font-family: 'SF Pro Display', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      color: #2a2a2a;
+      text-align: center;
+      text-transform: capitalize;
+      transition: all 0.2s ease;
+    }
+
+    .primary-button:hover {
+      background: #ffed4e;
+    }
+
+    .secondary-button {
+      background: #454330;
+      border-radius: 8px;
+      padding: 12px 24px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      font-family: 'SF Pro Display', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      color: #ffd400;
+      text-align: center;
+      text-transform: capitalize;
+      transition: all 0.2s ease;
+    }
+
+    .secondary-button:hover {
+      background: #565442;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 20px;
+      width: 90%;
+      max-width: 350px;
+      border: 1px solid #333;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      color: white;
+    }
+
+    .modal-content {
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      color: #ccc;
+      margin-bottom: 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #333;
+      border: 1px solid #555;
+      color: white;
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #ffd400;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-secondary {
+      background: #555;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #666;
+    }
+
+    .btn-primary {
+      background: #ffd400;
+      color: #222;
+    }
+
+    .btn-primary:hover {
+      background: #ffed4e;
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-selector">
+    <!-- Header -->
+    <div class="header">
+      <div class="app-icon">
+        <img src="icons/icon-header.svg" width="24" height="24" alt="Theme Engine">
+      </div>
+      <div class="app-title">Theme Engine</div>
+      <div class="header-controls">
+        <div class="toggle-switch" id="toggle-switch">
+          <div class="toggle-handle">
+            <div class="toggle-handle-inner"></div>
+          </div>
+        </div>
+        <div class="scan-button" id="scan-button">
+          <img src="icons/icon-reload.svg" width="24" height="24" alt="Scan page">
+        </div>
+        <div class="debug-button" id="debug-button" title="Toggle Debug Mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div id="theme-list">
+        <!-- Theme items will be populated here -->
+      </div>
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div class="bottom-buttons">
+      <button class="primary-button" id="create-theme-btn">Create New Theme</button>
+      <button class="secondary-button" id="import-theme-btn">Import from Computer</button>
+    </div>
+  </div>
+
+  <!-- Theme Modal -->
+  <div class="modal-overlay" id="theme-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Create Theme</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-content">
+        <div class="form-group">
+          <label class="form-label" for="theme-name">Theme Name</label>
+          <input type="text" class="form-input" id="theme-name" placeholder="Enter theme name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="theme-description">Description (optional)</label>
+          <input type="text" class="form-input" id="theme-description" placeholder="Enter theme description">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="theme-website-url">Website URL (optional)</label>
+          <input type="text" class="form-input" id="theme-website-url" placeholder="https://example.com or leave empty for all sites">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

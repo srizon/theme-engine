@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Editor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #2a2a2a;
+      color: white;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #3c3c3c;
+      padding: 15px 20px;
+      border-radius: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+      background: #ffd700;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #222;
+      font-size: 16px;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+      color: white;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .header-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .header-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .form-section {
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: white;
+      font-family: inherit;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #666;
+    }
+
+    .form-input::placeholder {
+      color: #888;
+    }
+
+    .variables-section {
+      padding: 0 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .variables-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background: #444;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .toggle-switch.active {
+      background: #ffd700;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #222;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(26px);
+    }
+
+    .editor-container {
+      flex: 1;
+      background: #1e1e1e;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #333;
+      min-height: 300px;
+    }
+
+    .editor-wrapper {
+      display: flex;
+      height: 100%;
+      position: relative;
+      min-height: 320px;
+    }
+
+    .line-numbers {
+      background: #252526;
+      color: #858585;
+      padding: 12px 8px 12px 12px;
+      border-right: 1px solid #333;
+      text-align: right;
+      user-select: none;
+      font-size: 13px;
+      line-height: 1.5;
+      min-width: 40px;
+      flex-shrink: 0;
+    }
+
+    .line-number {
+      height: 19.5px;
+      display: block;
+    }
+
+    .editor-content {
+      flex: 1;
+      position: relative;
+      background: #1e1e1e;
+    }
+
+    .editor-textarea {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: transparent;
+      caret-color: white;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      resize: none;
+      padding: 12px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    }
+
+    .editor-highlight {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 12px;
+      background: transparent;
+      pointer-events: none;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      z-index: 1;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .token {
+      color: #f0f0f0;
+    }
+
+    .token.property {
+      color: #9cdcfe;
+      font-weight: 500;
+      text-shadow: 0 0 1px rgba(156, 220, 254, 0.3);
+    }
+
+    .token.punctuation {
+      color: #d4d4d4;
+    }
+
+    .token.string {
+      color: #ce9178;
+      text-shadow: 0 0 1px rgba(206, 145, 120, 0.3);
+    }
+
+    .token.number {
+      color: #b5cea8;
+      text-shadow: 0 0 1px rgba(181, 206, 168, 0.3);
+    }
+
+    .token.keyword {
+      color: #569cd6;
+      font-weight: 500;
+      text-shadow: 0 0 1px rgba(86, 156, 214, 0.3);
+    }
+
+    .token.function {
+      color: #dcdcaa;
+      text-shadow: 0 0 1px rgba(220, 220, 170, 0.3);
+    }
+
+    .token.comment {
+      color: #6a9955;
+      font-style: italic;
+      opacity: 0.8;
+    }
+
+    .token.variable {
+      color: #4fc1ff;
+      font-weight: 500;
+      text-shadow: 0 0 1px rgba(79, 193, 255, 0.3);
+    }
+
+    .token.operator {
+      color: #d4d4d4;
+    }
+
+    .token.selector {
+      color: #d7ba7d;
+      font-weight: 500;
+    }
+
+    .token.important {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+
+    /* Value styling - for the actual values in CSS properties */
+    .token.value {
+      color: #ffb366;
+      font-weight: 500;
+      text-shadow: 0 0 1px rgba(255, 179, 102, 0.3);
+    }
+
+    .token.value-hex {
+      color: #ff69b4;
+      font-weight: 500;
+      text-shadow: 0 0 1px rgba(255, 105, 180, 0.3);
+    }
+
+    .token.value-color {
+      color: #98fb98;
+      font-weight: 500;
+      text-shadow: 0 0 1px rgba(152, 251, 152, 0.3);
+    }
+
+    .token.value-url {
+      color: #87ceeb;
+      font-weight: 500;
+      text-shadow: 0 0 1px rgba(135, 206, 235, 0.3);
+    }
+
+    .error-line {
+      background-color: rgba(244, 67, 54, 0.15);
+      border-left: 2px solid #f44336;
+    }
+
+    .error-marker {
+      color: #f44336;
+      background-color: rgba(244, 67, 54, 0.2);
+    }
+
+    .invalid-line {
+      color: #f44336 !important;
+    }
+
+    .invalid-line .token {
+      color: #f44336 !important;
+    }
+
+    /* Status indicator */
+    .status-indicator {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      font-size: 11px;
+      color: #888;
+      transition: all 0.3s ease;
+    }
+
+    .status-indicator.saving {
+      color: #ffd700;
+    }
+
+    .status-indicator.typing {
+      color: #888;
+      font-style: italic;
+    }
+
+    .status-indicator.saved {
+      color: #4CAF50;
+    }
+
+    .status-indicator.error {
+      color: #f44336;
+    }
+
+    /* Scrollbar styling */
+    .editor-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .editor-content::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+
+    .editor-content::-webkit-scrollbar-thumb {
+      background: #424242;
+      border-radius: 4px;
+    }
+
+    .editor-content::-webkit-scrollbar-thumb:hover {
+      background: #4f4f4f;
+    }
+
+    /* Selection styling */
+    .editor-textarea::selection {
+      background: #264f78;
+      color: #ffffff;
+    }
+
+    .editor-textarea::-moz-selection {
+      background: #264f78;
+      color: #ffffff;
+    }
+
+    .editor-highlight .token::selection {
+      background: #264f78;
+      color: #ffffff !important;
+    }
+
+    .editor-highlight .token::-moz-selection {
+      background: #264f78;
+      color: #ffffff !important;
+    }
+
+    .cursor-line {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-left">
+        <div class="header-icon">
+          <img src="icons/icon-header.svg" width="20" height="20" alt="Theme Engine">
+        </div>
+        <h1 class="title">Edit Theme</h1>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" id="export-btn" title="Export Theme">
+          <img src="icons/icon-download.png" width="20" height="20" alt="Export theme">
+        </button>
+        <button class="header-btn" id="delete-btn" title="Delete Theme">
+          <img src="icons/icon-delete.svg" width="20" height="20" alt="Delete theme">
+        </button>
+      </div>
+    </header>
+    
+    <div class="form-section">
+      <div class="form-group">
+        <label class="form-label" for="theme-name-input">Theme Name</label>
+        <input type="text" id="theme-name-input" class="form-input" placeholder="My first theme">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="website-url-input">Website URL</label>
+        <input type="text" id="website-url-input" class="form-input" placeholder="https://example.com">
+      </div>
+    </div>
+    
+    <div class="variables-section">
+      <label class="variables-label">Variables</label>
+      <main class="editor-container" id="editor-container">
+        <div class="editor-wrapper">
+          <div class="line-numbers" id="line-numbers">
+            <span class="line-number">1</span>
+          </div>
+          <div class="editor-content">
+            <textarea id="editor" class="editor-textarea" placeholder="--bg-body: yellow;
+--text-dark-on-inverse: var(--bg-body);
+--text-dark-on-body: var(--bg-body);"></textarea>
+            <div id="editor-highlight" class="editor-highlight"></div>
+          </div>
+        </div>
+        <div id="status-indicator" class="status-indicator"></div>
+      </main>
+    </div>
+  </div>
+
+  <script src="editor.js"></script>
+</body>
+</html> 
