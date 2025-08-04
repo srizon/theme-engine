@@ -71,7 +71,7 @@ theme-engine/
 │   ├── icon48.png        # 48x48 extension icon
 │   ├── icon128.png       # 128x128 extension icon
 │   ├── icon-delete.svg
-│   ├── icon-download.png
+│   ├── icon-download.svg
 │   ├── icon-edit.svg
 │   ├── icon-header.svg
 │   ├── icon-reload.svg
