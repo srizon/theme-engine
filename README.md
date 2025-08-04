@@ -2,7 +2,7 @@
 
 A professional browser extension for customizing website themes with CSS variables and real-time theme application. Transform any website's appearance instantly with powerful theming capabilities.
 
-![Theme Engine Pro](https://img.shields.io/badge/Version-3.0.0-blue.svg)
+![Theme Engine Pro](https://img.shields.io/badge/Version-3.0.1-blue.svg)
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-green.svg)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-orange.svg)
 
@@ -15,6 +15,20 @@ A professional browser extension for customizing website themes with CSS variabl
 - **📤 Import/Export**: Import themes from JSON or CSS files
 - **⚡ Performance Optimized**: Built with Manifest V3 for better performance
 - **🔄 Auto-sync**: Themes automatically sync across browser sessions
+
+## 📋 Changelog
+
+### v3.0.1 (Latest)
+- **🎨 Icon Improvements**: Updated extension icons with proper PNG formats for better display
+- **🔧 UI Refinements**: Improved button styling and layout in popup interface
+- **📁 Asset Organization**: Moved icons to dedicated icons directory for better organization
+- **✨ Enhanced UX**: Streamlined import button text for better clarity
+
+### v3.0.0
+- Initial release with core theming functionality
+- Real-time theme application with CSS variables
+- Theme management and URL pattern matching
+- Import/export capabilities
 
 ## 🚀 Quick Start
 
@@ -51,7 +65,11 @@ theme-engine/
 ├── popup.js              # Popup functionality
 ├── editor.html           # Theme editor interface
 ├── editor.js             # Theme editor functionality
-├── assets/               # Extension assets
+├── icons/                # Extension icons and assets
+│   ├── icon16.png        # 16x16 extension icon
+│   ├── icon32.png        # 32x32 extension icon
+│   ├── icon48.png        # 48x48 extension icon
+│   ├── icon128.png       # 128x128 extension icon
 │   ├── icon-delete.svg
 │   ├── icon-download.png
 │   ├── icon-edit.svg
@@ -59,14 +77,6 @@ theme-engine/
 │   ├── icon-reload.svg
 │   ├── icon-theme-selected.svg
 │   └── icon-theme-unselected.svg
-└── icons/                # Extension icons
-    ├── icon-delete.svg
-    ├── icon-download.png
-    ├── icon-edit.svg
-    ├── icon-header.svg
-    ├── icon-reload.svg
-    ├── icon-theme-selected.svg
-    └── icon-theme-unselected.svg
 ```
 
 ## 🛠️ Development

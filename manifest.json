@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Theme Engine Pro",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Professional website customization tool with CSS variables and real-time theme application.",
   "permissions": [
     "activeTab",
@@ -12,13 +12,19 @@
     "<all_urls>"
   ],
   "icons": {
-    "128": "icons/icon-header.svg"
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "action": {
     "default_popup": "popup.html",
     "default_title": "Theme Engine Pro",
     "default_icon": {
-      "128": "icons/icon-header.svg"
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
     }
   },
   "content_scripts": [
