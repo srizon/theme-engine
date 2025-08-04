@@ -2,7 +2,7 @@
 
 A professional browser extension for customizing website themes with CSS variables and real-time theme application. Transform any website's appearance instantly with powerful theming capabilities.
 
-![Theme Engine Pro](https://img.shields.io/badge/Version-3.0.1-blue.svg)
+![Theme Engine Pro](https://img.shields.io/badge/Version-1.0.1-blue.svg)
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-green.svg)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-orange.svg)
 
@@ -18,13 +18,13 @@ A professional browser extension for customizing website themes with CSS variabl
 
 ## 📋 Changelog
 
-### v3.0.1 (Latest)
+### v1.0.1 (Latest)
 - **🎨 Icon Improvements**: Updated extension icons with proper PNG formats for better display
 - **🔧 UI Refinements**: Improved button styling and layout in popup interface
 - **📁 Asset Organization**: Moved icons to dedicated icons directory for better organization
 - **✨ Enhanced UX**: Streamlined import button text for better clarity
 
-### v3.0.0
+### v1.0.0
 - Initial release with core theming functionality
 - Real-time theme application with CSS variables
 - Theme management and URL pattern matching
