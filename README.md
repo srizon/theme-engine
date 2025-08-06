@@ -6,33 +6,33 @@ A professional browser extension for customizing website themes with CSS variabl
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-green.svg)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-orange.svg)
 
-## ✨ Features
+## Features
 
-- **🎨 Real-time Theme Application**: Apply custom CSS themes to any website instantly
-- **🎯 CSS Variable Support**: Use CSS custom properties for dynamic theming
-- **📁 Theme Management**: Create, edit, and manage multiple themes
-- **🔗 URL Pattern Matching**: Apply themes to specific websites or all sites
-- **📤 Import/Export**: Import themes from JSON or CSS files
-- **⚡ Performance Optimized**: Built with Manifest V3 for better performance
-- **🔄 Auto-sync**: Themes automatically sync across browser sessions
-- **🚀 Intelligent Auto-Suggestions**: Smart CSS property and value completion
-- **⌨️ Enhanced Editor**: Comment/uncomment functionality and advanced keyboard shortcuts
+- **Real-time Theme Application**: Apply custom CSS themes to any website instantly
+- **CSS Variable Support**: Use CSS custom properties for dynamic theming
+- **Theme Management**: Create, edit, and manage multiple themes
+- **URL Pattern Matching**: Apply themes to specific websites or all sites
+- **Import/Export**: Import themes from JSON or CSS files
+- **Performance Optimized**: Built with Manifest V3 for better performance
+- **Auto-sync**: Themes automatically sync across browser sessions
+- **Intelligent Auto-Suggestions**: Smart CSS property and value completion
+- **Enhanced Editor**: Comment/uncomment functionality and advanced keyboard shortcuts
 
-## 📋 Changelog
+## Changelog
 
 ### v1.1.0 (Latest)
-- **🚀 Auto-Suggestions**: Intelligent CSS property and value suggestions with real-time filtering
-- **🎯 Smart Completion**: Context-aware suggestions for CSS properties, values, and custom variables
-- **⌨️ Enhanced Keyboard Shortcuts**: Added Ctrl+/ for comment/uncomment functionality
-- **🎨 Visual Indicators**: Color-coded suggestions with icons for variables and properties
-- **⚡ Performance**: Optimized suggestion system with debounced input handling
-- **🔧 Editor Improvements**: Better positioning and navigation for suggestion box
+- **Auto-Suggestions**: Intelligent CSS property and value suggestions with real-time filtering
+- **Smart Completion**: Context-aware suggestions for CSS properties, values, and custom variables
+- **Enhanced Keyboard Shortcuts**: Added Ctrl+/ for comment/uncomment functionality
+- **Visual Indicators**: Color-coded suggestions with icons for variables and properties
+- **Performance**: Optimized suggestion system with debounced input handling
+- **Editor Improvements**: Better positioning and navigation for suggestion box
 
 ### v1.0.1
-- **🎨 Icon Improvements**: Updated extension icons with proper PNG formats for better display
-- **🔧 UI Refinements**: Improved button styling and layout in popup interface
-- **📁 Asset Organization**: Moved icons to dedicated icons directory for better organization
-- **✨ Enhanced UX**: Streamlined import button text for better clarity
+- **Icon Improvements**: Updated extension icons with proper PNG formats for better display
+- **UI Refinements**: Improved button styling and layout in popup interface
+- **Asset Organization**: Moved icons to dedicated icons directory for better organization
+- **Enhanced UX**: Streamlined import button text for better clarity
 
 ### v1.0.0
 - Initial release with core theming functionality
@@ -40,7 +40,7 @@ A professional browser extension for customizing website themes with CSS variabl
 - Theme management and URL pattern matching
 - Import/export capabilities
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -73,7 +73,7 @@ A professional browser extension for customizing website themes with CSS variabl
   - `Ctrl+S`: Save theme
 - **Smart Completion**: Context-aware suggestions for properties, values, and CSS variables
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 theme-engine/
@@ -98,7 +98,7 @@ theme-engine/
 │   └── icon-theme-unselected.svg
 ```
 
-## 🛠️ Development
+## Development
 
 ### Prerequisites
 - Google Chrome browser
@@ -122,7 +122,7 @@ cd theme-engine
 # Load in Chrome as described in Installation section
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Manifest Features
 - **Permissions**: `activeTab`, `storage`, `scripting`
@@ -146,7 +146,7 @@ Themes are stored as JSON objects with the following structure:
 }
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Console Warnings
 The extension may show console warnings like:
@@ -178,7 +178,7 @@ Theme Engine: Extension context invalid, skipping visibility change handler
 3. Try reloading the extension
 4. Check the browser console for errors
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -186,17 +186,11 @@ Theme Engine: Extension context invalid, skipping visibility change handler
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- Built with Chrome Extension Manifest V3
-- Inspired by the need for better website customization tools
-- Thanks to the Chrome Extensions community for documentation and examples
-
-## 📞 Support
+## Support
 
 If you encounter any issues or have questions:
 1. Check the troubleshooting section above
