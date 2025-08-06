@@ -426,6 +426,61 @@
     .cursor-line {
       background-color: rgba(255, 255, 255, 0.05);
     }
+
+    /* Auto-suggestion styles */
+    .suggestion-box {
+      position: absolute;
+      background: #2d2d30;
+      border: 1px solid #3e3e42;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-size: 13px;
+      min-width: 200px;
+    }
+
+    .suggestion-box::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .suggestion-box::-webkit-scrollbar-track {
+      background: #2d2d30;
+    }
+
+    .suggestion-box::-webkit-scrollbar-thumb {
+      background: #424242;
+      border-radius: 3px;
+    }
+
+    .suggestion-box::-webkit-scrollbar-thumb:hover {
+      background: #4f4f4f;
+    }
+
+    .suggestion-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      color: #f0f0f0;
+      border-bottom: 1px solid #3e3e42;
+      transition: background 0.2s ease;
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .suggestion-item:hover {
+      background: #007acc;
+      color: #ffffff;
+    }
+
+    .suggestion-item.selected {
+      background: #007acc;
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>

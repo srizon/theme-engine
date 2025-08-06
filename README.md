@@ -2,7 +2,7 @@
 
 A professional browser extension for customizing website themes with CSS variables and real-time theme application. Transform any website's appearance instantly with powerful theming capabilities.
 
-![Theme Engine Pro](https://img.shields.io/badge/Version-1.0.1-blue.svg)
+![Theme Engine Pro](https://img.shields.io/badge/Version-1.1.0-blue.svg)
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-green.svg)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-orange.svg)
 
@@ -15,10 +15,20 @@ A professional browser extension for customizing website themes with CSS variabl
 - **📤 Import/Export**: Import themes from JSON or CSS files
 - **⚡ Performance Optimized**: Built with Manifest V3 for better performance
 - **🔄 Auto-sync**: Themes automatically sync across browser sessions
+- **🚀 Intelligent Auto-Suggestions**: Smart CSS property and value completion
+- **⌨️ Enhanced Editor**: Comment/uncomment functionality and advanced keyboard shortcuts
 
 ## 📋 Changelog
 
-### v1.0.1 (Latest)
+### v1.1.0 (Latest)
+- **🚀 Auto-Suggestions**: Intelligent CSS property and value suggestions with real-time filtering
+- **🎯 Smart Completion**: Context-aware suggestions for CSS properties, values, and custom variables
+- **⌨️ Enhanced Keyboard Shortcuts**: Added Ctrl+/ for comment/uncomment functionality
+- **🎨 Visual Indicators**: Color-coded suggestions with icons for variables and properties
+- **⚡ Performance**: Optimized suggestion system with debounced input handling
+- **🔧 Editor Improvements**: Better positioning and navigation for suggestion box
+
+### v1.0.1
 - **🎨 Icon Improvements**: Updated extension icons with proper PNG formats for better display
 - **🔧 UI Refinements**: Improved button styling and layout in popup interface
 - **📁 Asset Organization**: Moved icons to dedicated icons directory for better organization
@@ -53,6 +63,15 @@ A professional browser extension for customizing website themes with CSS variabl
 3. **Edit Themes**: Use the built-in editor to modify CSS variables
 4. **Apply to Sites**: Set URL patterns to apply themes to specific websites
 5. **Import/Export**: Share themes with others or backup your creations
+
+#### Editor Features
+- **Auto-Suggestions**: Type CSS properties or values to see intelligent suggestions
+- **Keyboard Shortcuts**: 
+  - `Ctrl+/` (or `Cmd+/` on Mac): Comment/uncomment selected lines
+  - `Tab`: Indent code
+  - `Shift+Tab`: Unindent code
+  - `Ctrl+S`: Save theme
+- **Smart Completion**: Context-aware suggestions for properties, values, and CSS variables
 
 ## 📁 Project Structure
 
