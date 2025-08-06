@@ -424,36 +424,85 @@ class ThemeEngine {
   }
 
   processCSS(rawCSS) {
+    // Simple approach: just add !important to all CSS rules to ensure they override webpage styles
+    // Extract CSS variables and put them in :root
     const lines = rawCSS.split('\n');
-    let applyingStyles = '';
-    const cssVariables = lines
-      .map(line => {
-        const trimmedLine = line.trim();
-        if (trimmedLine && trimmedLine.startsWith('--')) {
-          applyingStyles += this.generateApplyingCSS(trimmedLine) + '\n';
-        }
-        return trimmedLine;
-      })
-      .filter(line => line)
-      .join('\n  ');
+    const cssVariables = [];
+    const otherCSS = [];
+    
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine && trimmedLine.startsWith('--') && trimmedLine.includes(':')) {
+        // This is a CSS variable definition
+        cssVariables.push('  ' + trimmedLine);
+      } else if (trimmedLine) {
+        // This is regular CSS
+        otherCSS.push(line);
+      } else {
+        // Empty line - preserve in other CSS
+        otherCSS.push(line);
+      }
+    });
 
-    // Only add :root block if we have CSS variables
-    if (cssVariables.trim()) {
-      return `:root {\n  ${cssVariables}\n}\n${applyingStyles}`;
-    } else {
-      // If no CSS variables, just return the original CSS
-      return rawCSS;
+    // Process regular CSS to add !important
+    const processedCSS = this.addImportantToCSS(otherCSS.join('\n'));
+    
+    // Combine everything: CSS variables in :root first, then all other CSS
+    let result = '';
+    if (cssVariables.length > 0) {
+      // Use high specificity to ensure our variables override webpage variables
+      result += ':root {\n' + cssVariables.join('\n') + '\n}\n';
+      // Also add to html and body for extra specificity
+      result += 'html, body {\n' + cssVariables.join('\n') + '\n}\n\n';
     }
+    if (processedCSS.trim()) {
+      result += processedCSS;
+    }
+    
+    return result;
   }
 
-  generateApplyingCSS(variable) {
-    if (variable.startsWith('--bg-')) {
-      const element = variable.substring(5, variable.indexOf(':')).replace(/-/g, ' ');
-      const property = 'background-color';
-      return `${element} { ${property}: var(${variable.substring(0, variable.indexOf(':'))}); }`;
-    }
-    return '';
+  // Removed complex element generation - let users write their own CSS rules
+
+  addImportantToCSS(css) {
+    // Split CSS into rules
+    const rules = css.split('}');
+    const processedRules = rules.map(rule => {
+      if (!rule.trim()) return rule;
+      
+      // Split rule into selector and properties
+      const parts = rule.split('{');
+      if (parts.length !== 2) return rule;
+      
+      const selector = parts[0].trim();
+      const properties = parts[1].trim();
+      
+      if (!properties) return rule;
+      
+      // Process each property to add !important
+      const processedProperties = properties.split(';')
+        .map(property => {
+          const trimmedProperty = property.trim();
+          if (!trimmedProperty) return trimmedProperty;
+          
+          // Skip if already has !important
+          if (trimmedProperty.includes('!important')) {
+            return trimmedProperty;
+          }
+          
+          // Add !important to the property
+          return trimmedProperty + ' !important';
+        })
+        .filter(property => property) // Remove empty properties
+        .join('; ');
+      
+      return `${selector} {\n  ${processedProperties}\n}`;
+    });
+    
+    return processedRules.join('\n');
   }
+
+  // Removed automatic CSS generation - variables are just made available in :root
 
   sendMessageToContentScript(message, callback = null) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

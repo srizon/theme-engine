@@ -2,7 +2,7 @@
 
 A professional browser extension for customizing website themes with CSS variables and real-time theme application. Transform any website's appearance instantly with powerful theming capabilities.
 
-![Theme Engine Pro](https://img.shields.io/badge/Version-1.1.0-blue.svg)
+![Theme Engine Pro](https://img.shields.io/badge/Version-1.2.0-blue.svg)
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-green.svg)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-orange.svg)
 
@@ -20,7 +20,16 @@ A professional browser extension for customizing website themes with CSS variabl
 
 ## Changelog
 
-### v1.1.0 (Latest)
+### v1.2.0 (Latest)
+- **Enhanced Extension Context Validation**: Improved stability with better extension context checking and error handling
+- **Advanced URL Pattern Matching**: Enhanced theme application logic with support for wildcards and subdomain matching
+- **Robust Error Recovery**: Better handling of extension reloads and page navigation scenarios
+- **Performance Optimizations**: Improved content script initialization and message handling
+- **Auto-Save Improvements**: More responsive auto-saving with reduced delays (300ms vs 500ms)
+- **Storage Listener Enhancements**: Real-time theme updates across extension components
+- **CSS Variable Support**: Enhanced CSS variable extraction and processing for better theme application
+
+### v1.1.0
 - **Auto-Suggestions**: Intelligent CSS property and value suggestions with real-time filtering
 - **Smart Completion**: Context-aware suggestions for CSS properties, values, and custom variables
 - **Enhanced Keyboard Shortcuts**: Added Ctrl+/ for comment/uncomment functionality
@@ -148,21 +157,24 @@ Themes are stored as JSON objects with the following structure:
 
 ## Troubleshooting
 
-### Console Warnings
-The extension may show console warnings like:
+### Console Messages (v1.2.0+)
+The extension includes enhanced error handling and may show informational messages like:
 ```
-Theme Engine: Extension context invalid, skipping visibility change handler
+Theme Engine: Extension context invalid, skipping CSS load
+Theme Engine: Already initialized, skipping...
 ```
 
 **Why This Happens:**
-- **Page navigation** - When moving between pages
+- **Extension Context Validation** - The extension now performs rigorous context checking for stability
+- **Page navigation** - When moving between pages or during single-page app transitions
 - **Extension reloading** - During development when the extension is reloaded
 - **Tab updates** - When tabs are refreshed or navigated
 - **Service worker lifecycle** - Background service worker termination/restart
 
 **How to Handle:**
-1. **Normal Usage**: These warnings are harmless and don't affect functionality
-2. **Development**: Warnings are automatically shown in development mode
+1. **Normal Usage**: These messages are informational and indicate proper error handling
+2. **Development**: Enhanced logging helps with debugging and development
+3. **Performance**: Better context validation prevents unnecessary operations
 
 ### Common Issues
 

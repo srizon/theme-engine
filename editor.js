@@ -229,13 +229,17 @@ class ThemeEditor {
     }
     
     // Check if we're in a property context (after a selector, before a colon)
+    // Only show suggestions if we're inside a CSS rule block (after an opening brace)
     const propertyMatch = currentLine.match(/^(\s*)([a-zA-Z-]*)$/);
     if (propertyMatch) {
-      const prefix = propertyMatch[2];
-      const suggestions = this.getCSSProperties(prefix);
-      
-      if (suggestions.length > 0) {
-        return { suggestions, prefix };
+      // Check if we're inside a CSS rule block by counting braces
+      if (this.isInsideCSSRuleBlock(beforeCursor)) {
+        const prefix = propertyMatch[2];
+        const suggestions = this.getCSSProperties(prefix);
+        
+        if (suggestions.length > 0) {
+          return { suggestions, prefix };
+        }
       }
     }
     
@@ -280,16 +284,77 @@ class ThemeEditor {
     // Check if we're after a colon (property: value)
     const valueMatch = currentLine.match(/^(\s*[a-zA-Z-]+:\s*)([a-zA-Z0-9#\-\(\)]*)$/);
     if (valueMatch) {
-      const property = valueMatch[1].replace(/:\s*$/, '').trim();
-      const prefix = valueMatch[2];
-      const suggestions = this.getCSSValues(property, prefix);
-      
-      if (suggestions.length > 0) {
-        return { suggestions, prefix, property };
+      // Check if we're inside a CSS rule block by counting braces
+      if (this.isInsideCSSRuleBlock(beforeCursor)) {
+        const property = valueMatch[1].replace(/:\s*$/, '').trim();
+        const prefix = valueMatch[2];
+        const suggestions = this.getCSSValues(property, prefix);
+        
+        if (suggestions.length > 0) {
+          return { suggestions, prefix, property };
+        }
       }
     }
     
     return null;
+  }
+
+  isInsideCSSRuleBlock(text) {
+    // Count opening and closing braces to determine if we're inside a rule block
+    let braceCount = 0;
+    let inComment = false;
+    let inString = false;
+    let stringChar = '';
+    
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const nextChar = text[i + 1];
+      
+      // Handle comments
+      if (char === '/' && nextChar === '*') {
+        inComment = true;
+        i++; // Skip next character
+        continue;
+      }
+      if (char === '*' && nextChar === '/' && inComment) {
+        inComment = false;
+        i++; // Skip next character
+        continue;
+      }
+      if (inComment) continue;
+      
+      // Handle single-line comments
+      if (char === '/' && nextChar === '/') {
+        // Skip to end of line
+        const lineEnd = text.indexOf('\n', i);
+        if (lineEnd === -1) break;
+        i = lineEnd;
+        continue;
+      }
+      
+      // Handle strings
+      if ((char === '"' || char === "'") && !inString) {
+        inString = true;
+        stringChar = char;
+        continue;
+      }
+      if (char === stringChar && inString) {
+        inString = false;
+        stringChar = '';
+        continue;
+      }
+      if (inString) continue;
+      
+      // Count braces
+      if (char === '{') {
+        braceCount++;
+      } else if (char === '}') {
+        braceCount--;
+      }
+    }
+    
+    // We're inside a rule block if we have more opening braces than closing braces
+    return braceCount > 0;
   }
 
   getCSSProperties(prefix = '') {
@@ -1403,8 +1468,80 @@ class ThemeEditor {
   }
 
   processCSS(rawCSS) {
-    // Simplified processing - just return the CSS as is
-    return rawCSS;
+    // Simple approach: just add !important to all CSS rules to ensure they override webpage styles
+    // Extract CSS variables and put them in :root
+    const lines = rawCSS.split('\n');
+    const cssVariables = [];
+    const otherCSS = [];
+    
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine && trimmedLine.startsWith('--') && trimmedLine.includes(':')) {
+        // This is a CSS variable definition
+        cssVariables.push('  ' + trimmedLine);
+      } else if (trimmedLine) {
+        // This is regular CSS
+        otherCSS.push(line);
+      } else {
+        // Empty line - preserve in other CSS
+        otherCSS.push(line);
+      }
+    });
+
+    // Process regular CSS to add !important
+    const processedCSS = this.addImportantToCSS(otherCSS.join('\n'));
+    
+    // Combine everything: CSS variables in :root first, then all other CSS
+    let result = '';
+    if (cssVariables.length > 0) {
+      // Use high specificity to ensure our variables override webpage variables
+      result += ':root {\n' + cssVariables.join('\n') + '\n}\n';
+      // Also add to html and body for extra specificity
+      result += 'html, body {\n' + cssVariables.join('\n') + '\n}\n\n';
+    }
+    if (processedCSS.trim()) {
+      result += processedCSS;
+    }
+    
+    return result;
+  }
+
+  addImportantToCSS(css) {
+    // Split CSS into rules
+    const rules = css.split('}');
+    const processedRules = rules.map(rule => {
+      if (!rule.trim()) return rule;
+      
+      // Split rule into selector and properties
+      const parts = rule.split('{');
+      if (parts.length !== 2) return rule;
+      
+      const selector = parts[0].trim();
+      const properties = parts[1].trim();
+      
+      if (!properties) return rule;
+      
+      // Process each property to add !important
+      const processedProperties = properties.split(';')
+        .map(property => {
+          const trimmedProperty = property.trim();
+          if (!trimmedProperty) return trimmedProperty;
+          
+          // Skip if already has !important
+          if (trimmedProperty.includes('!important')) {
+            return trimmedProperty;
+          }
+          
+          // Add !important to the property
+          return trimmedProperty + ' !important';
+        })
+        .filter(property => property) // Remove empty properties
+        .join('; ');
+      
+      return `${selector} {\n  ${processedProperties}\n}`;
+    });
+    
+    return processedRules.join('\n');
   }
 
   sendMessageToContentScript(message, callback = null) {
